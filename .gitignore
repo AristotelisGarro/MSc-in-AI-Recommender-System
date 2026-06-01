@@ -1,0 +1,21 @@
+# Raw dataset files (download with data/download_data.py)
+data/ml-100k/
+data/ml-1m/
+
+# Generated CSVs & model (reproduced by running notebooks)
+data/train.csv
+data/test.csv
+data/movies.csv
+data/users.csv
+data/test_cb_preds.csv
+data/test_cf_preds.csv
+data/svd_model.pkl
+
+# Python
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# IDE
+.vscode/
+.idea/
