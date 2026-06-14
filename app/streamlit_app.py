@@ -104,6 +104,7 @@ def rating_color(r):
 # ── Sidebar ───────────────────────────────────────────────────────────────────
 st.sidebar.title("🎬 Movie Recommender")
 st.sidebar.markdown("**MSc AI — Θέμα 2**")
+st.sidebar.markdown("**Γκάρο Αριστοτέλης — mtn2503**")
 st.sidebar.markdown("Υβριδικό Σύστημα Συστάσεων")
 st.sidebar.divider()
 
@@ -137,7 +138,7 @@ if page == "Αρχική":
     """)
 
     st.divider()
-    st.subheader("Αποτελέσματα σε ένα βλέμμα")
+    st.subheader("Αποτελέσματα")
     res_df = (
         comparison_df[['Model', 'RMSE', 'F1@10']]
         .rename(columns={'Model': 'Μοντέλο'})
@@ -313,8 +314,7 @@ elif page == "Συστάσεις":
 
 # ── Page: Σύγκριση Μοντέλων ───────────────────────────────────────────────────
 elif page == "Σύγκριση Μοντέλων":
-    st.title("🔀 Σύγκριση CB vs CF vs Hybrid ανά Χρήστη")
-    st.markdown("Δες τις διαφορετικές συστάσεις που δίνει κάθε μοντέλο για τον ίδιο χρήστη.")
+    st.title("🔀 Σύγκριση CB vs CF vs Hybrid ανά Χρήστη")    
 
     user_id = st.selectbox("Επίλεξε User ID", sorted(train['user_id'].unique()), index=0)
     top_n   = st.slider("Top-N συστάσεις", 5, 15, 10)
@@ -416,6 +416,6 @@ elif page == "Αξιολόγηση":
     - **Content-Based** (RMSE={cb_res['rmse']:.4f}): Βασίζεται αποκλειστικά στα genres — απλό αλλά αδύναμο, αγνοεί τα patterns άλλων χρηστών
     - **Collaborative SVD** (RMSE={cf_res['rmse']:.4f}): Εκμεταλλεύεται το interaction history, σημαντικά καλύτερο στο RMSE και F1
     - **Weighted Hybrid α={BEST_ALPHA}** (RMSE={hyb_res['rmse']:.4f}): Η καλύτερη προσέγγιση — το CB προσθέτει μικρή αλλά σταθερή βελτίωση
-    - **Switching Hybrid** (RMSE={sw_rmse:.4f}): Ισοδύναμο με pure CF — στο MovieLens 1M δεν υπάρχουν χρήστες με <5 ratings (cold-start) οπότε πάντα επιλέγει CF
+    - **Switching Hybrid thr=50** (RMSE={sw_rmse:.4f}): 36.1% χρήστες (<50 ratings στο train) → CB, 63.9% → CF. Ελαφρώς χειρότερο από pure CF — δείχνει ότι για engaged users το CF κυριαρχεί
     - Το χαμηλό α={BEST_ALPHA} δείχνει ότι με πλούσιο interaction history **το CF κυριαρχεί**, το CB έχει μεγαλύτερη αξία σε cold-start σενάρια
     """)
