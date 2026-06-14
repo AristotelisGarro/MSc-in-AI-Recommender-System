@@ -1,7 +1,8 @@
 # Hybrid Movie Recommender System
 
 **MSc in Artificial Intelligence — Εφαρμογές Τεχνητής Νοημοσύνης**  
-**Θέμα 2: Υλοποίηση Υβριδικού Συστήματος Συστάσεων**
+**Θέμα 2: Υλοποίηση Υβριδικού Συστήματος Συστάσεων**  
+**Φοιτητής:** Γκάρο Αριστοτέλης &nbsp;|&nbsp; **ΑΜ:** mtn2503
 
 ---
 
@@ -62,7 +63,7 @@ r̂(u,i) = μ + b_u + b_i + q_i^T · p_u
 | Μέθοδος | Τύπος |
 |---|---|
 | **Weighted Hybrid** | `score = α·CB + (1−α)·CF` — βέλτιστο **α=0.10** μέσω grid search |
-| **Switching Hybrid** | `CB αν \|ratings(u)\| < threshold, αλλιώς CF` — βέλτιστο threshold=5 |
+| **Switching Hybrid** | `CB αν \|ratings(u)\| < threshold, αλλιώς CF` — threshold=50 (36.1% → CB, 63.9% → CF) |
 
 ---
 
@@ -73,13 +74,13 @@ r̂(u,i) = μ + b_u + b_i + q_i^T · p_u
 | Content-Based | 1.0162 | 0.8119 | 0.6793 | 0.3933 | 0.4982 | 0.6072 | 0.5956 | 0.6014 |
 | Collaborative (SVD) | 0.8784 | 0.6902 | 0.7917 | 0.4404 | 0.5660 | 0.6866 | 0.6387 | 0.6618 |
 | **Weighted Hybrid (α=0.10)** | **0.8768** | **0.6919** | **0.7929** | **0.4407** | **0.5665** | **0.6870** | **0.6390** | **0.6621** |
-| Switching Hybrid (thr=5) | 0.8784 | 0.6902 | 0.7917 | 0.4404 | 0.5660 | 0.6866 | 0.6387 | 0.6618 |
+| Switching Hybrid (thr=50) | 0.8897 | 0.6980 | 0.7737 | 0.4224 | 0.5465 | 0.6835 | 0.6347 | 0.6582 |
 
 ### Βασικά Ευρήματα
 
 - **Weighted Hybrid** επιτυγχάνει το καλύτερο RMSE και F1@10 — το CB component προσθέτει μικρή αλλά σταθερή βελτίωση πάνω στο pure SVD.
 - **Χαμηλό α=0.10** υποδηλώνει ότι με πλούσιο interaction history (min 20 ratings/user) το CF κυριαρχεί. Το CB θα είχε μεγαλύτερη αξία σε cold-start σενάρια.
-- **Switching Hybrid = pure CF** στο MovieLens 1M: κανένας χρήστης δεν έχει <5 ratings (minimum 20 εγγυημένο από το dataset), οπότε η CB διαδρομή δεν ενεργοποιείται ποτέ.
+- **Switching Hybrid (thr=50)**: 36.1% χρηστών (με <50 ratings στο train) δρομολογούνται στο CB, 63.9% στο CF. RMSE=0.8897 — ελαφρώς χειρότερο από pure CF, αποδεικνύοντας ότι ακόμα και για sparse χρήστες το SVD υπερέχει του genre-based CB.
 - **SVD >> KNN**: ~10% καλύτερο RMSE έναντι KNN Pearson. Λόγος: sparsity 95.5% — το SVD αξιοποιεί ολόκληρο τον πίνακα μέσω latent factors, οι KNN αδυνατούν να βρουν αξιόπιστους γείτονες.
 - **Pearson > Cosine > Jaccard** για KNN: το Pearson mean-centering αντισταθμίζει το rating bias (μέσο rating 3.58). Το Jaccard αγνοεί εντελώς τις τιμές — κατάλληλο μόνο για implicit feedback.
 
